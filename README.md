@@ -9,10 +9,10 @@ protoc 3.8.0
 ```
 make parse
 
-./parse samples/one_sample_from_py.tfr
+./parse samples/one_sample_from_py.tfr # can parse any tfrecord file, print the content to stdout
 
 make read
-./read samples/one_sample_from_py.tfr
+./read samples/one_sample_from_py.tfr # can only read file containing a Serialized Example without header and footer
 
 make write
 ./write <your new file> # the result file is simply a Serialized Example without header and footer
