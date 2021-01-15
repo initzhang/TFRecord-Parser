@@ -11,6 +11,12 @@ make parse
 
 ./parse samples/one_sample_from_py.tfr
 
+make read
+./read samples/one_sample_from_py.tfr
+
+make write
+./write <your new file> # the result file is simply a Serialized Example without header and footer
+
 ```
 
 ## Background about this project
@@ -42,8 +48,8 @@ From the above comments we can see that, the `tf.train.Example` is stored in the
 So now it is clear how we can parse one TFRecord file:
 1. read a TFRecord in binary format
 2. read the first 8 bytes into a uint64, get the length
-3. skip the 4 bytes crc of length (you should be careful about this)
-4. read length bytes as data, and using Protocal Buffer C++ API to decode it.
+3. skip the 4 bytes crc of length (**you should be careful about this**)
+4. read length bytes as data, and use Protocal Buffer C++ API to decode it.
 5. skip the 4 bytes crc of data
 6. repeat 2~5 until you reach the end of the file
 
