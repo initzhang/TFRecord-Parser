@@ -14,6 +14,7 @@ struct membuf : std::streambuf
 };
 
 void print_hex(char* buf, int len) {
+    buf[len] = '\0';
     for(int i = 0; i < len; ++i) {
         cout << setfill('0') << setw(2) << hex << int(buf[i]) << " " ;
         if(i && (i % 10 == 0))
@@ -24,7 +25,6 @@ void print_hex(char* buf, int len) {
 
 int main(int argc, char* argv[]) {
 
-
     if (argc != 2) {
         cerr << "Usage:  " << argv[0] << " FILE_PATH" << endl;
         return -1;
@@ -33,39 +33,41 @@ int main(int argc, char* argv[]) {
     // Read the existing file.
     fstream input(argv[1], ios::in | ios::binary);
 
-    // Read length
+    // repeatedly Read length
     uint64_t length;
-    input.read(reinterpret_cast<char *>(&length), 8);
-    cout << length << endl;
+    while(input.read(reinterpret_cast<char *>(&length), 8)) {
 
-    // Read length crc
-    uint32_t crc_length;
-    input.read(reinterpret_cast<char *>(&crc_length), 4);
-    cout << "crc_length: " << hex << crc_length << endl;
+        cout << length << endl;
 
-    // Read data
-    char data_buffer[length+1];
-    data_buffer[length] = '\0';
-    input.read(data_buffer, length);
-    print_hex(data_buffer, length);
-    
-    // Read data crc
-    uint32_t crc_data;
-    input.read(reinterpret_cast<char *>(&crc_data), 4);
-    cout << "crc_data: " << hex << crc_data << endl;
+        // Read length crc
+        uint32_t crc_length;
+        input.read(reinterpret_cast<char *>(&crc_length), 4);
+        // cout << "crc_length: " << hex << crc_length << endl;
 
-    membuf sbuf(data_buffer, data_buffer + length);
-    std::istream in(&sbuf);
+        // Read data
+        char data_buffer[length];
+        input.read(data_buffer, length);
+        // print_hex(data_buffer, length);
+        
+        // Read data crc
+        uint32_t crc_data;
+        input.read(reinterpret_cast<char *>(&crc_data), 4);
+        // cout << "crc_data: " << hex << crc_data << endl;
 
-    tensorflow::Example example;
-    if (!example.ParseFromIstream(&in)) {
-        cerr << "Failed to parse file." << endl;
-        return -1;
-    } else {
-        cout << "successfully parse file" << endl;
+        membuf sbuf(data_buffer, data_buffer + length);
+        std::istream in(&sbuf);
+
+        tensorflow::Example example;
+        if (!example.ParseFromIstream(&in)) {
+            cerr << "Failed to parse file." << endl;
+            return -1;
+        } else {
+            cout << "successfully parse file" << endl;
+        }
     }
 
 
     input.close();
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }
