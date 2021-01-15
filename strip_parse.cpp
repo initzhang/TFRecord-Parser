@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    // Read the existing file.
+    // Read the file.
     fstream input(argv[1], ios::in | ios::binary);
 
     // repeatedly Read length
