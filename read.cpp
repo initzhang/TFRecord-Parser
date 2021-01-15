@@ -4,7 +4,7 @@
 #include "example.pb.h"
 using namespace std;
 
-// Iterates though all people in the AddressBook and prints info about them.
+// Iterates though all feature in the example and print them.
 void ListEntry(const tensorflow::Example& example) {
     auto features = example.features();
     int feature_size = features.feature_size(); 
@@ -45,9 +45,6 @@ void ListEntry(const tensorflow::Example& example) {
             cout << endl;
         }
     }
-    
-    // cout << all_features_map["feature0"]
-
 }
 
 int main(int argc, char* argv[]) {
