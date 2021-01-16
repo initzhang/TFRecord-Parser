@@ -21,7 +21,7 @@ make write
 
 ## Background about this project
 
-In one of my recent internship project, I need to parse TFRecord file using C++, after some searching I found the [tensorflow C++ TFRecordReader API document](https://www.tensorflow.org/api_docs/cc/class/tensorflow/ops/t-f-record-reader). But to use this API, you need to compile and build tensorflow C++ from source, which is not easy and too complicated for such a simple need. So I open this project to decode TFRecord using C++ directly.
+I want to parse TFRecord file using C++, after some searching I found the [tensorflow C++ TFRecordReader API document](https://www.tensorflow.org/api_docs/cc/class/tensorflow/ops/t-f-record-reader). But to use this API, you need to compile and build tensorflow C++ from source, which is not easy and too complicated for such a simple need. So I open this project to decode TFRecord using C++ directly.
 
 To use and understand this project, you need to have some basic knowledge about [Protocal Buffer](https://developers.google.com/protocol-buffers/docs/overview).
 
@@ -43,7 +43,7 @@ class RecordWriter {
   static constexpr size_t kFooterSize = sizeof(uint32);
 ```
 
-From the above comments we can see that, the `tf.train.Example` is stored in the data field, its length is also stored along with two crc field.
+From the comments above we can see that, the `tf.train.Example` is stored in the data field, the length field store the bytes length, and two crc fields are added respectively.
 
 So now it is clear how we can parse one TFRecord file:
 1. read a TFRecord in binary format
@@ -55,7 +55,7 @@ So now it is clear how we can parse one TFRecord file:
 
 ## Protocal Buffer
 
-To get the Protocal Buffer C++ API, you need to compile proto files first. Note that the `feature.proto` is imported in `example.proto`, so you need to compile both and reference corresponding C++ header afterwards(when compile your own read or write C++ code).
+To decode the `data` field, you need corresponding Protocal Buffer C++ API, so you need to compile proto files first. Note that the `feature.proto` is imported in `example.proto`, so you need to compile both and reference corresponding C++ header afterwards(when compile your own read/write C++ code).
 
 The `feature.proto` and the `example.proto` is downloaded from tensorflow-r1.15 code base. The corresponding protoc version is 3.8.0.
 
