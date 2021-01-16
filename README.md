@@ -2,7 +2,7 @@
 TFRecord parser using C++ and Protocal Buffer 
 
 ## Requirements
-protoc 3.8.0
+protoc 3.8.0 & C++ 11
 
 ## Usage
 
