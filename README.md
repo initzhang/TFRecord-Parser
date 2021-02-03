@@ -58,6 +58,8 @@ To decode the `data` field, you need corresponding Protocal Buffer C++ API, so y
 
 The `feature.proto` and the `example.proto` is downloaded from tensorflow-r1.15 code base. The corresponding protoc version is 3.8.0.
 
+To use a different version of Protoc, just `protoc --cpp_out=. feature.proto` and `protoc --cpp_out=. example.proto`
+
 Sample read and write usage is in `read.cpp` and `write.cpp`.
 
 To use the `ParseFromIstream` method, we also need to convert the `data` field as istream, which is discussed in this [post](https://stackoverflow.com/questions/7781898/get-an-istream-from-a-char).
