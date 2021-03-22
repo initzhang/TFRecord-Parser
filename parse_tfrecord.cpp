@@ -77,36 +77,35 @@ int main(int argc, char* argv[]) {
     fstream input(argv[1], ios::in | ios::binary);
 
     // repeatedly Read length
-    uint64_t length;
+    uint64_t length = 0;
+    uint64_t max_len = 1000;
+    char* data_buffer = new char[max_len];
+    
     while(input.read(reinterpret_cast<char *>(&length), 8)) {
+        if(length > max_len) {
+            delete data_buffer;
+            max_len = 2 * length;
+            data_buffer = new char[max_len];
+        }
         cout << "=======================" << endl;
-
         cout << "current example length: " << length << endl;
 
-        // Read length crc
-        uint32_t crc_length;
-        input.read(reinterpret_cast<char *>(&crc_length), 4);
-        // cout << "crc_length: " << hex << crc_length << endl;
+        // the following fields: crc of length(4 bytes), data(length bytes), crc of data(4 bytes)
+        // we directly read in (length+8) bytes, and skip the head/tail
+        input.read(data_buffer, length + 8);
 
-        // Read data
-        char data_buffer[length];
-        input.read(data_buffer, length);
-        // print_hex(data_buffer, length);
+        /*
+        print_hex(data_buffer, 4); // print crc of length
+        print_hex(data_buffer + 4, length); // print data
+        print_hex(data_buffer + length + 4, 4); // print crc of data
+        */
         
-        // Read data crc
-        uint32_t crc_data;
-        input.read(reinterpret_cast<char *>(&crc_data), 4);
-        // cout << "crc_data: " << hex << crc_data << endl;
-
-        membuf sbuf(data_buffer, data_buffer + length);
-        std::istream in(&sbuf);
-
         tensorflow::Example example;
-        if (!example.ParseFromIstream(&in)) {
+        if (!example.ParseFromArray(reinterpret_cast<void*>(data_buffer + 4), length)) {
             cerr << "Failed to parse file." << endl;
             return -1;
         } else {
-            // cout << "successfully parse file" << endl;
+            cout << "successfully parse file into an Example" << endl;
         }
 
         ListEntry(example);

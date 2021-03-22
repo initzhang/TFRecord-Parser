@@ -12,7 +12,7 @@ void ListEntry(const tensorflow::Example& example) {
     
     // all feature is const ::PROTOBUF_NAMESPACE_ID::Map<std::string, ::tensorflow::Feature>
     auto all_feature_map = features.feature();
-    for (google::protobuf::Map< std::string, tensorflow::Feature >::const_iterator it = all_feature_map.begin(); it != all_feature_map.end(); ++it) {
+    for (auto it = all_feature_map.begin(); it != all_feature_map.end(); ++it) {
         cout << "---------------------------" << endl;
         auto cur_feature_name = it->first;
         cout << cur_feature_name << endl;
@@ -57,15 +57,13 @@ int main(int argc, char* argv[]) {
 
   tensorflow::Example example;
 
-  {
-    // Read the existing file.
-    fstream input(argv[1], ios::in | ios::binary);
-    if (!example.ParseFromIstream(&input)) {
+  // Read the existing file.
+  fstream input(argv[1], ios::in | ios::binary);
+  if (!example.ParseFromIstream(&input)) {
       cerr << "Failed to parse file." << endl;
       return -1;
-    } else {
+  } else {
       cout << "Succeed in parsing file." << endl;
-    }
   }
 
   ListEntry(example);

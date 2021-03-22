@@ -14,7 +14,7 @@ make read
 ./read samples/single_message # can only read file containing a Serialized Example without header and footer
 
 make write
-./write <your new file> # the result file is simply a Serialized Example without header and footer
+./write <your new file> # the result file is simply a Serialized Example Message without header and footer
 
 ```
 
@@ -58,11 +58,9 @@ To decode the `data` field, you need corresponding Protocal Buffer C++ API, so y
 
 The `feature.proto` and the `example.proto` is downloaded from tensorflow-r1.15 code base. The corresponding protoc version is 3.8.0.
 
-Sample read and write usage is in `read.cpp` and `write.cpp`.
+For a single protobuf message, sample read and write usage is in `read_message.cpp` and `write_message.cpp`.
 
-To use the `ParseFromIstream` method, we also need to convert the `data` field as istream, which is discussed in this [post](https://stackoverflow.com/questions/7781898/get-an-istream-from-a-char).
-
-The `strip_parse.cpp` can parse an arbitrary TFRecord file.
+For tfrecord, sample parse usage is in `parse_tfrecord.cpp`, this file can parse arbitrary TFRecord files.
 
 
 
