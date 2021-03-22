@@ -58,6 +58,8 @@ To decode the `data` field, you need corresponding Protocal Buffer C++ API, so y
 
 The `feature.proto` and the `example.proto` is downloaded from tensorflow-r1.15 code base. The corresponding protoc version is 3.8.0.
 
+To use a different version of Protoc, just `protoc --cpp_out=. feature.proto` and `protoc --cpp_out=. example.proto`
+
 For a single protobuf message, sample read and write usage is in `read_message.cpp` and `write_message.cpp`.
 
 For tfrecord, sample parse usage is in `parse_tfrecord.cpp`, this file can parse arbitrary TFRecord files.
